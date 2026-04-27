@@ -7,3 +7,13 @@ requests
 beautifulsoup4
 python-dotenv
 google-generativeai
+beautifulsoup4
+flask
+flask-cors
+google-generativeai
+imagehash
+numpy
+Pillow
+python-dotenv
+requests
+gunicorn
