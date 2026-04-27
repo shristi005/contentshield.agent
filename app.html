@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContentShield - Autonomous Digital Asset Protection</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --surface-color: #1a1a1a;
+            --surface-border: #2a2a2a;
+            --accent-color: #00d4ff;
+            --accent-hover: #00b0d4;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --red-badge: #ff4757;
+            --yellow-badge: #ffa502;
+            --green-badge: #2ed573;
+            --terminal-bg: #000000;
+            --terminal-text: #2ed573;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER */
+        header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--surface-border);
+            background: linear-gradient(180deg, rgba(26,26,26,0.8) 0%, rgba(10,10,10,1) 100%);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-emoji {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.4));
+        }
+
+        .logo-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: var(--accent-color);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* MAIN CONTAINER */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 1rem;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* FORM */
+        .form-container {
+            background-color: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .form-container.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            outline: none;
+            appearance: none;
+        }
+        
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300d4ff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem top 50%;
+            background-size: 0.65rem auto;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        input::placeholder {
+            color: #4a4a4a;
+        }
+
+        button.primary-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background-color: var(--accent-color);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        button.primary-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        button.primary-btn:active {
+            transform: translateY(0);
+        }
+
+        /* TERMINAL PANEL */
+        .terminal-panel {
+            width: 100%;
+            background-color: var(--terminal-bg);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-height: 300px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 212, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal-panel::before {
+            content: "root@contentshield-agent:~";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--surface-color);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 0.3rem 1rem;
+            font-family: 'Inter', sans-serif;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        .terminal-content {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .log-entry {
+            color: var(--terminal-text);
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: fadeInLog 0.3s forwards;
+            line-height: 1.4;
+        }
+
+        .log-entry.red { color: var(--red-badge); }
+        .log-entry.yellow { color: var(--yellow-badge); }
+        
+        @keyframes fadeInLog {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: var(--terminal-text);
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+            vertical-align: middle;
+            margin-top: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* RESULTS PANEL */
+        .results-panel {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            gap: 2rem;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-header {
+            text-align: center;
+        }
+
+        .results-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .card-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .val-total { color: var(--accent-color); }
+        .val-red { color: var(--red-badge); }
+        .val-yellow { color: var(--yellow-badge); }
+        .val-green { color: var(--green-badge); }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        button.secondary-btn {
+            padding: 1.2rem 2rem;
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--surface-border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button.secondary-btn:hover {
+            background-color: var(--surface-color);
+            border-color: var(--text-muted);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dmca-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #d0d0d0;
+            white-space: pre-wrap;
+            background: var(--bg-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--surface-border);
+            max-height: 400px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+            .summary-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            .actions {
+                flex-direction: column;
+            }
+            button.primary-btn {
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <span class="logo-emoji">🛡️</span>
+            <span class="logo-text">ContentShield</span>
+        </div>
+        <div class="tagline">Autonomous Digital Asset Protection</div>
+    </header>
+
+    <main>
+        <!-- FORM PANEL -->
+        <div class="form-container" id="formPanel">
+            <div class="form-group">
+                <label>Asset Name</label>
+                <input type="text" id="assetName" placeholder="UEFA Champions League Highlights 2024">
+            </div>
+            <div class="form-group">
+                <label>Rights Owner</label>
+                <input type="text" id="rightsOwner" placeholder="UEFA / Your Organization">
+            </div>
+            <div class="form-group">
+                <label>Notify Email</label>
+                <input type="email" id="notifyEmail" placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Content Type</label>
+                <select id="contentType">
+                    <option>Sports</option>
+                    <option>Film & TV</option>
+                    <option>Music Video</option>
+                    <option>News</option>
+                    <option>Documentary</option>
+                    <option>General</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Keywords</label>
+                <input type="text" id="keywords" placeholder="champions league highlights goals">
+            </div>
+            <button class="primary-btn" id="startBtn">
+                <span>🔍</span> Start Protection Scan
+            </button>
+        </div>
+
+        <!-- TERMINAL PANEL -->
+        <div class="terminal-panel" id="terminalPanel">
+            <div class="terminal-content" id="terminalContent"></div>
+            <div><span class="cursor" id="terminalCursor"></span></div>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="results-panel" id="resultsPanel">
+            <div class="results-header">
+                <h2>Scan Complete</h2>
+                <p style="color: var(--text-muted)">The autonomous agent has finished enforcing your rights.</p>
+            </div>
+
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-value val-total">2</div>
+                    <div class="card-label">URLs Scanned</div>
+                </div>
+                <div class="card">
+                    <div class="card-value val-red">1</div>
+                    <div class="card-label">Auto Takedowns</div>
+                </div>
+                <div class="card">
+                    <div class="card-value val-yellow">1</div>
+                    <div class="card-label">Monitoring</div>
+                </div>
+                <div class="card">
+                    <div class="card-value val-green">1</div>
+                    <div class="card-label">Email Sent</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="primary-btn" onclick="location.reload()" style="max-width: 250px;">Start New Scan</button>
+                <button class="secondary-btn" id="viewDmcaBtn">View Takedown Notice</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- DMCA MODAL -->
+    <div class="modal-overlay" id="dmcaModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <div class="modal-title">
+                <h3 style="color: #fff;">📄 Sample DMCA Notice Generated</h3>
+            </div>
+            <div class="dmca-text">To Whom It May Concern,
+
+I am writing this notice pursuant to the Digital Millennium Copyright Act (DMCA) to report copyright infringement.
+
+1. The copyrighted work at issue is:
+<span id="dmcaAssetTitle" style="color:var(--accent-color)">[Asset Name]</span>
+Owned by: <span id="dmcaAssetOwner" style="color:var(--accent-color)">[Rights Owner]</span>
+
+2. The unauthorized material is located at:
+https://streameast.io/unauthorized-stream-link
+
+3. Match Confidence: 100% (Perceptual Hash Verified)
+
+I have a good faith belief that the use of the material is not authorized by the copyright owner. I state under penalty of perjury that the information in this notice is accurate.
+
+Sincerely,
+ContentShield Autonomous Agent
+on behalf of the Rights Holder</div>
+        </div>
+    </div>
+
+    <script>
+        const formPanel = document.getElementById('formPanel');
+        const startBtn = document.getElementById('startBtn');
+        const terminalPanel = document.getElementById('terminalPanel');
+        const terminalContent = document.getElementById('terminalContent');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const dmcaModal = document.getElementById('dmcaModal');
+        const viewDmcaBtn = document.getElementById('viewDmcaBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        let scanResultsData = [];
+
+        startBtn.addEventListener('click', () => {
+            // Get inputs
+            const assetName = document.getElementById('assetName').value || document.getElementById('assetName').placeholder;
+            const rightsOwner = document.getElementById('rightsOwner').value || document.getElementById('rightsOwner').placeholder;
+            const notifyEmail = document.getElementById('notifyEmail').value;
+            const contentType = document.getElementById('contentType').value;
+            const keywords = document.getElementById('keywords').value || document.getElementById('keywords').placeholder;
+            
+            // Populate Modal with input values
+            document.getElementById('dmcaAssetTitle').innerText = assetName;
+            document.getElementById('dmcaAssetOwner').innerText = rightsOwner;
+
+            const payload = {
+                asset_name: assetName,
+                rights_owner: rightsOwner,
+                content_type: contentType,
+                keywords: keywords,
+                notify_email: notifyEmail
+            };
+
+            // Hide form and show terminal
+            formPanel.classList.add('hidden');
+            setTimeout(() => {
+                formPanel.style.display = 'none';
+                terminalPanel.style.display = 'flex';
+                terminalContent.innerHTML = ""; // Clear existing logs
+                runScanStream(payload);
+            }, 300);
+        });
+
+        async function runScanStream(payload) {
+            try {
+                const response = await fetch('/scan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        asset_name: document.getElementById('assetName').value,
+                        rights_owner: document.getElementById('rightsOwner').value,
+                        content_type: document.getElementById('contentType').value,
+                        keywords: document.getElementById('keywords').value,
+                        notify_email: document.getElementById('notifyEmail').value
+                    })
+                });
+
+                if (!response.ok) {
+                    appendLog("❌ Server Error: " + response.status, "red");
+                    return;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder("utf-8");
+                let buffer = "";
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, {stream: true});
+                    let lines = buffer.split('\n\n');
+                    buffer = lines.pop(); // Keep partial chunk
+
+                    for (let chunk of lines) {
+                        if (chunk.startsWith('data: ')) {
+                            const dataStr = chunk.substring(6);
+                            try {
+                                const event = JSON.parse(dataStr);
+                                if (event.type === 'log') {
+                                    appendLog(event.message);
+                                } else if (event.type === 'complete') {
+                                    scanResultsData = event.data.results;
+                                    showResults(scanResultsData, event.data.email_sent);
+                                }
+                            } catch(e) {
+                                console.error("Error parsing JSON", e, dataStr);
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                appendLog("❌ Connection Error: " + err.message, "red");
+            }
+        }
+
+        function appendLog(message, forcedClass="") {
+            let className = forcedClass;
+            if (!className) {
+                if (message.includes("AUTO_TAKEDOWN") || message.includes("INFRINGING") || message.includes("Error") || message.includes("❌")) {
+                    className = "red";
+                } else if (message.includes("MONITOR") || message.includes("⚠️")) {
+                    className = "yellow";
+                }
+            }
+            
+            const el = document.createElement('div');
+            el.className = `log-entry ${className}`;
+            el.innerText = message;
+            terminalContent.appendChild(el);
+            
+            terminalPanel.scrollTop = terminalPanel.scrollHeight;
+        }
+
+        function showResults(results, emailSent) {
+            document.getElementById('terminalCursor').style.display = 'none';
+            
+            // Update summary cards
+            const total = results.length;
+            const autoTakedowns = results.filter(r => r.action === "AUTO_TAKEDOWN").length;
+            const monitoring = results.filter(r => r.action === "MONITOR").length;
+            
+            document.querySelector('.val-total').innerText = total;
+            document.querySelector('.val-red').innerText = autoTakedowns;
+            document.querySelector('.val-yellow').innerText = monitoring;
+            document.querySelector('.val-green').innerText = emailSent ? "1" : "0";
+            
+            setTimeout(() => {
+                resultsPanel.style.display = 'flex';
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 500);
+        }
+
+        // Modal event listeners
+        viewDmcaBtn.addEventListener('click', () => {
+            if (scanResultsData.length > 0) {
+                const firstTakedown = scanResultsData.find(r => r.action === "AUTO_TAKEDOWN") || scanResultsData[0];
+                if (firstTakedown && firstTakedown.url) {
+                    const dmcaTextEl = dmcaModal.querySelector('.dmca-text');
+                    let html = dmcaTextEl.innerHTML;
+                    if (html.includes('https://streameast.io/unauthorized-stream-link')) {
+                        dmcaTextEl.innerHTML = html.replace('https://streameast.io/unauthorized-stream-link', firstTakedown.url);
+                    }
+                }
+            }
+            dmcaModal.classList.add('active');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            dmcaModal.classList.remove('active');
+        });
+
+        dmcaModal.addEventListener('click', (e) => {
+            if(e.target === dmcaModal) {
+                dmcaModal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

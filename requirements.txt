@@ -1,0 +1,9 @@
+opencv-python
+imagehash
+Pillow
+numpy
+librosa
+requests
+beautifulsoup4
+python-dotenv
+google-generativeai
