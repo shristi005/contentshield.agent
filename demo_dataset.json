@@ -1,0 +1,108 @@
+{
+  "film": [
+    {
+      "url": "https://www.youtube.com/watch?v=Way9Dexny3w",
+      "title": "Dune: Part Two | Official Trailer 2",
+      "snippet": "Watch the official trailer for Dune Part Two",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.2,
+      "type": "official",
+      "demo_match": 0.15,
+      "expected_behavior": "safe"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=_YUzQa_1RCE",
+      "title": "Dune Part 2 Reaction Video",
+      "snippet": "My reaction to Dune Part Two trailer",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "reaction",
+      "demo_match": 0.35,
+      "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/x8kexample",
+      "title": "Dune Part Two Full Movie HD",
+      "snippet": "Watch full movie free HD",
+      "platform": "dailymotion.com",
+      "platform_risk_score": 0.7,
+      "type": "full_upload",
+      "demo_match": 0.85,
+      "expected_behavior": "infringing"
+    },
+    {
+      "url": "https://www.reddit.com/r/movies/comments/18abcde/dune_part_two_discussion/",
+      "title": "Dune Part Two Discussion Thread",
+      "snippet": "Let's talk about the movie",
+      "platform": "reddit.com",
+      "platform_risk_score": 0.4,
+      "type": "discussion",
+      "demo_match": 0.10,
+      "expected_behavior": "safe"
+    }
+  ],
+  "music_video": [
+    {
+      "url": "https://www.youtube.com/watch?v=kJQP7kiw5Fk",
+      "title": "Luis Fonsi - Despacito (Official Video)",
+      "snippet": "Official music video",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.2,
+      "type": "official",
+      "demo_match": 0.20,
+      "expected_behavior": "safe"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
+      "title": "Song Reaction Video",
+      "snippet": "Reacting to the song",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "reaction",
+      "demo_match": 0.40,
+      "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/x7xyz123",
+      "title": "Full Song Download Free",
+      "snippet": "Download full mp3 free",
+      "platform": "dailymotion.com",
+      "platform_risk_score": 0.8,
+      "type": "full_upload",
+      "demo_match": 0.88,
+      "expected_behavior": "infringing"
+    }
+  ],
+  "sports": [
+    {
+      "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "title": "Football Match Highlights",
+      "snippet": "Official highlights",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "official",
+      "demo_match": 0.25,
+      "expected_behavior": "safe"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ScMzIvxBSi4",
+      "title": "Live Match Reaction",
+      "snippet": "Reacting to the match",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "reaction",
+      "demo_match": 0.45,
+      "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/xsport123",
+      "title": "Full Match Replay HD",
+      "snippet": "Watch full match free",
+      "platform": "dailymotion.com",
+      "platform_risk_score": 0.9,
+      "type": "full_upload",
+      "demo_match": 0.90,
+      "expected_behavior": "infringing"
+    }
+  ]
+}

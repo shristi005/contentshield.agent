@@ -63,6 +63,7 @@ Follow these strict instructions:
 4. End with a specific yes/no question for the rights holder regarding how to proceed with the escalated cases.
 5. Sound like a smart human colleague, not a system report.
 6. Stay strictly under 200 words total.
+7. Ensure the summary sentences for each URL reflect the specific violation. For example: 'Found a full-length pirate stream of the movie' instead of 'potential for reuploads'.
 """
 
     try:

@@ -58,6 +58,8 @@ def judge_violation(original_title, rights_owner, content_type,
     )
 
     prompt = f"""
+You are analyzing a potential infringement for the {content_type} category. Use industry-specific logic (e.g., be strict with live sports, but consider Fair Use for News).
+
 Please evaluate the following potential copyright violation.
 
 Original Content:
@@ -80,6 +82,10 @@ Consider these rules:
 - Verified partners may be licensed
 - Reaction/commentary videos are gray area
 - Full reuploads are always INFRINGING
+
+When analyzing, ensure your reasoning and escalation_reason strictly match the Content Type.
+If the type is FILM, do not mention sports or matches. Mention 'unauthorized theatrical streaming' or 'leaked footage'.
+If the type is MUSIC, mention 'unauthorized audio distribution' or 'copyrighted performance'.
 
 Respond ONLY with a JSON object containing exactly these fields:
 {{

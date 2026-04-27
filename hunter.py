@@ -100,32 +100,25 @@ def hunt_for_content(asset_title, content_type, keywords, search_api_key=None, c
         print("Warning: Google Custom Search API key or Engine ID is missing.")
         return []
 
-    # Build base query and decide modifiers based on content_type
-    queries = []
-    base_query = f'"{asset_title}" {" ".join(keywords)}'
+    # Mapping genres to specific search "leak" terms
+    genre_tags = {
+        "sports": ["live stream", "full match", "highlights"],
+        "film and tv": ["full movie", "leaked scene", "watch online free"],
+        "film": ["full movie", "leaked scene", "watch online free"],
+        "music video": ["official video leak", "full performance", "mp4 download"],
+        "music_video": ["official video leak", "full performance", "mp4 download"],
+        "news": ["exclusive footage", "broadcast leak", "raw video"],
+        "documentary": ["full documentary", "educational leak", "watch free"],
+        "general": ["unauthorized reupload", "digital asset", "full version"]
+    }
     
-    modifiers = []
-    if content_type == "sports":
-        modifiers = ["highlights", "free stream", "full match"]
-    elif content_type == "film":
-        modifiers = ["full movie", "free watch", "123movies"]
-    elif content_type == "music_video":
-        modifiers = ["official video", "free download", "mp3"]
-    elif content_type == "news":
-        modifiers = ["footage", "exclusive", "broadcast"]
-    elif content_type == "general":
-        modifiers = ["free watch", "unauthorized", "download"]
-    else:
-        modifiers = ["free watch", "unauthorized", "download"]
-        
-    # Generate exactly 5 queries
-    queries.append(base_query)
-    for mod in modifiers:
-        queries.append(f"{base_query} {mod}")
-        
-    # If fewer than 5 queries generated, add a combined modifier query
-    if len(queries) < 5:
-        queries.append(f"{base_query} {' '.join(modifiers)}")
+    tags = genre_tags.get(content_type.lower(), ["unauthorized"])
+    
+    # Combine the asset name with genre-specific "piracy" keywords
+    keywords_str = " ".join(keywords) if isinstance(keywords, list) else keywords
+    query = f"{asset_title} {' '.join(tags)} {keywords_str}"
+    
+    queries = [query]
     
     results = []
     seen_urls = set()
