@@ -5,9 +5,9 @@
       "title": "Dune: Part Two | Official Trailer 2",
       "snippet": "Watch the official trailer for Dune Part Two",
       "platform": "youtube.com",
-      "platform_risk_score": 0.2,
+      "platform_risk_score": 0.1,
       "type": "official",
-      "demo_match": 0.15,
+      "demo_match": 0.92,
       "expected_behavior": "safe"
     },
     {
@@ -17,17 +17,37 @@
       "platform": "youtube.com",
       "platform_risk_score": 0.3,
       "type": "reaction",
-      "demo_match": 0.35,
+      "demo_match": 0.45,
       "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=clip12345",
+      "title": "Best Scenes from Dune Part 2",
+      "snippet": "Top scenes compilation",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.4,
+      "type": "clip",
+      "demo_match": 0.65,
+      "expected_behavior": "monitor"
     },
     {
       "url": "https://www.dailymotion.com/video/x8kexample",
       "title": "Dune Part Two Full Movie HD",
       "snippet": "Watch full movie free HD",
       "platform": "dailymotion.com",
-      "platform_risk_score": 0.7,
+      "platform_risk_score": 0.9,
       "type": "full_upload",
-      "demo_match": 0.85,
+      "demo_match": 0.95,
+      "expected_behavior": "infringing"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/xmirror001",
+      "title": "Dune 2 Full Movie Mirror Upload",
+      "snippet": "Backup link for full movie",
+      "platform": "dailymotion.com",
+      "platform_risk_score": 0.95,
+      "type": "mirror",
+      "demo_match": 0.97,
       "expected_behavior": "infringing"
     },
     {
@@ -35,9 +55,9 @@
       "title": "Dune Part Two Discussion Thread",
       "snippet": "Let's talk about the movie",
       "platform": "reddit.com",
-      "platform_risk_score": 0.4,
+      "platform_risk_score": 0.2,
       "type": "discussion",
-      "demo_match": 0.10,
+      "demo_match": 0.08,
       "expected_behavior": "safe"
     }
   ],
@@ -47,9 +67,9 @@
       "title": "Luis Fonsi - Despacito (Official Video)",
       "snippet": "Official music video",
       "platform": "youtube.com",
-      "platform_risk_score": 0.2,
+      "platform_risk_score": 0.1,
       "type": "official",
-      "demo_match": 0.20,
+      "demo_match": 0.91,
       "expected_behavior": "safe"
     },
     {
@@ -59,17 +79,37 @@
       "platform": "youtube.com",
       "platform_risk_score": 0.3,
       "type": "reaction",
-      "demo_match": 0.40,
+      "demo_match": 0.48,
       "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=shorts001",
+      "title": "Despacito Short Clip",
+      "snippet": "15 sec viral clip",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.4,
+      "type": "short",
+      "demo_match": 0.55,
+      "expected_behavior": "monitor"
+    },
+    {
+      "url": "https://www.soundcloud.com/song123",
+      "title": "Despacito Unofficial Upload",
+      "snippet": "Re-uploaded version",
+      "platform": "soundcloud.com",
+      "platform_risk_score": 0.7,
+      "type": "reupload",
+      "demo_match": 0.80,
+      "expected_behavior": "monitor"
     },
     {
       "url": "https://www.dailymotion.com/video/x7xyz123",
       "title": "Full Song Download Free",
       "snippet": "Download full mp3 free",
       "platform": "dailymotion.com",
-      "platform_risk_score": 0.8,
+      "platform_risk_score": 0.9,
       "type": "full_upload",
-      "demo_match": 0.88,
+      "demo_match": 0.96,
       "expected_behavior": "infringing"
     }
   ],
@@ -79,9 +119,9 @@
       "title": "Football Match Highlights",
       "snippet": "Official highlights",
       "platform": "youtube.com",
-      "platform_risk_score": 0.3,
+      "platform_risk_score": 0.2,
       "type": "official",
-      "demo_match": 0.25,
+      "demo_match": 0.88,
       "expected_behavior": "safe"
     },
     {
@@ -91,17 +131,121 @@
       "platform": "youtube.com",
       "platform_risk_score": 0.3,
       "type": "reaction",
-      "demo_match": 0.45,
+      "demo_match": 0.50,
       "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=clipmatch001",
+      "title": "Top Goals Compilation",
+      "snippet": "Best goals of the match",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.4,
+      "type": "clip",
+      "demo_match": 0.70,
+      "expected_behavior": "monitor"
+    },
+    {
+      "url": "https://www.twitch.tv/stream123",
+      "title": "Live Match Streaming",
+      "snippet": "Streaming match live",
+      "platform": "twitch.tv",
+      "platform_risk_score": 0.8,
+      "type": "live_stream",
+      "demo_match": 0.85,
+      "expected_behavior": "infringing"
     },
     {
       "url": "https://www.dailymotion.com/video/xsport123",
       "title": "Full Match Replay HD",
       "snippet": "Watch full match free",
       "platform": "dailymotion.com",
+      "platform_risk_score": 0.95,
+      "type": "full_upload",
+      "demo_match": 0.97,
+      "expected_behavior": "infringing"
+    }
+  ],
+  "news": [
+    {
+      "url": "https://www.youtube.com/watch?v=news001",
+      "title": "Official News Broadcast Clip",
+      "snippet": "Breaking news coverage from official channel",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.1,
+      "type": "official",
+      "demo_match": 0.85,
+      "expected_behavior": "safe"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=newsreact001",
+      "title": "News Commentary Reaction",
+      "snippet": "Discussing latest news event",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "reaction",
+      "demo_match": 0.40,
+      "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.twitter.com/post/newsclip",
+      "title": "Short News Clip Shared",
+      "snippet": "Clip from news broadcast",
+      "platform": "twitter.com",
+      "platform_risk_score": 0.5,
+      "type": "clip",
+      "demo_match": 0.60,
+      "expected_behavior": "monitor"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/newsfull001",
+      "title": "Full News Broadcast Upload",
+      "snippet": "Complete news program uploaded",
+      "platform": "dailymotion.com",
       "platform_risk_score": 0.9,
       "type": "full_upload",
-      "demo_match": 0.90,
+      "demo_match": 0.93,
+      "expected_behavior": "infringing"
+    }
+  ],
+  "news": [
+    {
+      "url": "https://www.youtube.com/watch?v=news001",
+      "title": "Official News Broadcast Clip",
+      "snippet": "Breaking news coverage from official channel",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.1,
+      "type": "official",
+      "demo_match": 0.85,
+      "expected_behavior": "safe"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=newsreact001",
+      "title": "News Commentary Reaction",
+      "snippet": "Discussing latest news event",
+      "platform": "youtube.com",
+      "platform_risk_score": 0.3,
+      "type": "reaction",
+      "demo_match": 0.40,
+      "expected_behavior": "fair_use"
+    },
+    {
+      "url": "https://www.twitter.com/post/newsclip",
+      "title": "Short News Clip Shared",
+      "snippet": "Clip from news broadcast",
+      "platform": "twitter.com",
+      "platform_risk_score": 0.5,
+      "type": "clip",
+      "demo_match": 0.60,
+      "expected_behavior": "monitor"
+    },
+    {
+      "url": "https://www.dailymotion.com/video/newsfull001",
+      "title": "Full News Broadcast Upload",
+      "snippet": "Complete news program uploaded",
+      "platform": "dailymotion.com",
+      "platform_risk_score": 0.9,
+      "type": "full_upload",
+      "demo_match": 0.93,
       "expected_behavior": "infringing"
     }
   ]
