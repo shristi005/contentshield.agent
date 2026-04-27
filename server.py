@@ -1,7 +1,7 @@
 import os
 import json
 import time
-from flask import Flask, request, Response, jsonify, send_file
+from flask import Flask, request, Response, jsonify, render_template
 from flask_cors import CORS
 from dotenv import load_dotenv
 
@@ -18,7 +18,7 @@ CORS(app)
 
 @app.route("/")
 def index():
-    return send_file("app.html")
+    return render_template("app.html")
 
 @app.route("/scan", methods=["POST"])
 def scan():
