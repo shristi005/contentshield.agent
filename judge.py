@@ -2,131 +2,71 @@ import os
 import time
 import json
 import requests
+import google.generativeai as genai
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-def call_ai(prompt, system_instruction):
-    api_key = os.getenv("GROQ_API_KEY")
-    
-    response = requests.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        },
-        json={
-            "model": "llama-3.1-8b-instant",
-            "messages": [
-                {"role": "system", "content": system_instruction},
-                {"role": "user", "content": prompt}
-            ],
-            "temperature": 0.1,
-            "max_tokens": 1024
-        }
-    )
-    
-    result = response.json()
-    return result["choices"][0]["message"]["content"]
-
-def judge_violation(original_title, rights_owner, content_type,
-                    suspect_url, suspect_title, snippet, match_percentage, platform_risk):
+def gemini_reasoning(title, snippet, similarity, platform):
     """
-    Uses the Gemini API to make a legal enforcement decision about a potential 
-    copyright violation.
+    Secondary reasoning layer using Gemini to provide context-aware classification
+    and short explanation.
     """
-    # Default response in case of API failure or parsing errors
-    default_response = {
-        "verdict": "UNCLEAR",
-        "confidence": 0,
-        "reasoning": "System encountered an error evaluating the content.",
-        "severity": "LOW",
-        "action": "ESCALATE",
-        "escalation_reason": "API error or missing response.",
-        "revenue_risk": "LOW"
-    }
-
-    if not os.getenv("GROQ_API_KEY"):
-        print("Error: GROQ_API_KEY not found in environment.")
-        return default_response
-
-    system_instruction = (
-        "You are ContentShield, an autonomous digital rights enforcement AI. "
-        "You protect any type of digital media — sports, film, music, news. "
-        "You always respond in valid JSON only. No preamble. No explanation outside JSON."
-    )
-
-    prompt = f"""
-You are analyzing a potential infringement for the {content_type} category. Use industry-specific logic (e.g., be strict with live sports, but consider Fair Use for News).
-
-Please evaluate the following potential copyright violation.
-
-Original Content:
-- Title: {original_title}
-- Rights Owner: {rights_owner}
-- Content Type: {content_type}
-
-Suspect Content:
-- URL: {suspect_url}
-- Title: {suspect_title}
-- Snippet: {snippet}
-
-Detection Metrics:
-- Fingerprint Match Percentage: {match_percentage * 100:.1f}%
-- Platform Risk Score: {platform_risk} (Scale 0.0 to 1.0)
-
-Consider these rules:
-- Match below 60% = likely not same content
-- News clips under 30 seconds may be fair use
-- Verified partners may be licensed
-- Reaction/commentary videos are gray area
-- Full reuploads are always INFRINGING
-
-When analyzing, ensure your reasoning and escalation_reason strictly match the Content Type.
-If the type is FILM, do not mention sports or matches. Mention 'unauthorized theatrical streaming' or 'leaked footage'.
-If the type is MUSIC, mention 'unauthorized audio distribution' or 'copyrighted performance'.
-
-Respond ONLY with a JSON object containing exactly these fields:
-{{
-  "verdict": "INFRINGING" or "FAIR_USE" or "LICENSED_LIKELY" or "UNCLEAR" or "NOT_INFRINGING",
-  "confidence": <integer from 0-100>,
-  "reasoning": "<one sentence explanation>",
-  "severity": "CRITICAL" or "HIGH" or "MEDIUM" or "LOW",
-  "action": "AUTO_TAKEDOWN" or "ESCALATE" or "MONITOR" or "IGNORE",
-  "escalation_reason": "<why human is needed if applicable or empty string>",
-  "revenue_risk": "LOW" or "MEDIUM" or "HIGH"
-}}
-"""
-
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return "API Error: GEMINI_API_KEY not configured. Falling back to rule-based only."
+    
+    genai.configure(api_key=api_key)
+    
     try:
-        # Sleep for 1 second to avoid rate limiting
-        time.sleep(1)
-        
-        text = call_ai(prompt, system_instruction).strip()
-        
-        # Safely clean up markdown blocks if the model somehow returns them despite the mime_type
-        if text.startswith("```json"):
-            text = text[7:]
-        if text.endswith("```"):
-            text = text[:-3]
-            
-        result = json.loads(text.strip())
-        
-        # Validate that essential keys are present
-        expected_keys = ["verdict", "confidence", "reasoning", "severity", "action", "escalation_reason", "revenue_risk"]
-        for key in expected_keys:
-            if key not in result:
-                raise ValueError(f"Missing expected key '{key}' in JSON response")
-                
-        return result
-        
-    except json.JSONDecodeError as e:
-        print(f"Error parsing Gemini response as JSON: {e}")
-        return default_response
+        model = genai.GenerativeModel('gemini-pro')
+        prompt = f"""
+        Analyze the following potential copyright violation and provide a short classification and explanation (max 2 sentences).
+        Title: {title}
+        Snippet: {snippet}
+        Similarity Match: {similarity*100:.1f}%
+        Platform: {platform}
+        """
+        response = model.generate_content(prompt)
+        return response.text.strip()
     except Exception as e:
-        print(f"Error during Groq API call or processing: {e}")
-        return default_response
+        print(f"Gemini API Error: {e}")
+        return "Explanation unavailable due to API error. Falling back to rule-based only."
+
+def judge_violation(expected, item_type, match_percentage, platform_risk, suspect_title, snippet, platform):
+    """
+    Combines rule-based decision with Gemini reasoning.
+    """
+    # 1. Keep rule-based decision
+    if expected == "infringing" or (match_percentage > 0.8 and platform_risk > 0.6):
+        action = "AUTO_TAKEDOWN"
+        reasoning = "High similarity full upload on risky platform warrants immediate takedown."
+        verdict = "INFRINGING"
+    elif expected == "fair_use" or item_type == "reaction":
+        action = "MONITOR"
+        reasoning = "Reaction video format detected; requires human monitoring for fair use assessment."
+        verdict = "FAIR_USE"
+    elif expected == "safe" or match_percentage < 0.3:
+        action = "IGNORE"
+        reasoning = "Low match discussion or official material is safe."
+        verdict = "NOT_INFRINGING"
+    else:
+        action = "ESCALATE"
+        reasoning = "Ambiguous match requires manual human escalation."
+        verdict = "UNCLEAR"
+
+    # 2. Call gemini_reasoning()
+    # Gemini is used for context-aware reasoning and explanation, not primary classification
+    ai_explanation = gemini_reasoning(suspect_title, snippet, match_percentage, platform)
+
+    # 3. Attach result as "ai_explanation"
+    return {
+        "verdict": verdict,
+        "action": action,
+        "reasoning": reasoning,
+        "ai_explanation": ai_explanation
+    }
 
 def calculate_risk_score(match_pct, confidence, platform_risk):
     """

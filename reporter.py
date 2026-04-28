@@ -64,6 +64,7 @@ Follow these strict instructions:
 5. Sound like a smart human colleague, not a system report.
 6. Stay strictly under 200 words total.
 7. Ensure the summary sentences for each URL reflect the specific violation. For example: 'Found a full-length pirate stream of the movie' instead of 'potential for reuploads'.
+8. Integrate the 'ai_explanation' from the scan results into your summaries to provide clear, context-aware reasoning for each decision.
 """
 
     try:
