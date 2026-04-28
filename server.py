@@ -113,22 +113,22 @@ def scan():
             else:
                 confidence_label = "LOW"
             
-            if expected == "infringing" or (match_percentage > 0.8 and platform_risk > 0.6):
-                action = "AUTO_TAKEDOWN"
-                reasoning = f"High similarity ({match_percentage*100:.0f}%) full upload on risky platform warrants immediate takedown."
-                verdict = "INFRINGING"
-            elif expected == "fair_use" or item_type == "reaction":
-                action = "MONITOR"
-                reasoning = "Reaction video format detected; requires human monitoring for fair use assessment."
-                verdict = "FAIR_USE"
-            elif expected == "safe" or match_percentage < 0.3:
-                action = "IGNORE"
-                reasoning = "Low match discussion or official material is safe."
-                verdict = "NOT_INFRINGING"
-            else:
-                action = "ESCALATE"
-                reasoning = "Ambiguous match requires manual human escalation."
-                verdict = "UNCLEAR"
+            platform_domain = urlparse(url).netloc if url else "unknown"
+            
+            decision = judge_violation(
+                expected, 
+                item_type, 
+                match_percentage, 
+                platform_risk, 
+                title, 
+                snippet, 
+                platform_domain
+            )
+            
+            action = decision["action"]
+            reasoning = decision["reasoning"]
+            verdict = decision["verdict"]
+            ai_explanation = decision.get("ai_explanation", "")
 
             yield send_event("log", f"   [Step] Enforcing action...")
             time.sleep(0.3)
@@ -139,7 +139,7 @@ def scan():
             result = {
                 "url": url,
                 "title": title,
-                "platform": urlparse(url).netloc if url else "unknown",
+                "platform": platform_domain,
                 "platform_risk": platform_risk,
                 "match_percentage": match_percentage,
                 "frames_compared": frames_compared,
@@ -148,6 +148,7 @@ def scan():
                 "confidence": confidence,
                 "confidence_label": confidence_label,
                 "reasoning": reasoning,
+                "ai_explanation": ai_explanation,
                 "severity": "HIGH" if action == "AUTO_TAKEDOWN" else "LOW",
                 "action": action,
                 "escalation_reason": "Review required" if action in ["MONITOR", "ESCALATE"] else "",
